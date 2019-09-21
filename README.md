@@ -74,4 +74,44 @@ include() 함수는 다른 URLconf(여기서는 polls.urls)들을 참조할 수 
  ### - 모델 활성화
  
  앱을 현재의 프로젝트에 포함시키기 위해서는, 앱의 구성 클래스에 대한 참조를 INSTALLED_APPS 설정에 추가해야 한다. 
- 
+ makemigrations 을 실행시킴으로서, 당신이 모델을 변경시킨 사실과(이 경우에는 새로운 모델을 만들었습니다) 이 변경사항을 migration으로 저장시키고 싶다는 것을 Django에게 알려줍니다.
+
+migration은 Django가 모델(즉, 데이터베이스 스키마를 포함한)의 변경사항을 저장하는 방법으로써, 디스크상의 파일로 존재한다. 
+migrate 명령은 아직 적용되지 않은 마이그레이션을 모두 수집해 이를 실행하며(Django는 django_migrations 테이블을 두어 마이그레이션 적용 여부를 추적) 이 과정을 통해 모델에서의 변경 사항들과 데이터베이스의 스키마의 동기화가 이루어진다.
+
+<모델 변경하는법>
+1. (models.py 에서) 모델을 변경.
+2. python manage.py makemigrations을 통해 이 변경사항에 대한 마이그레이션을 만들기.
+3. python manage.py migrate 명령을 통해 변경사항을 데이터베이스에 적용.
+(2번 3번 명령이 분리되어 있음)
+
+
+### - Django 관리자 
+
+```
+...\> py manage.py createsuperuser
+```
+위 명령으로  관리 사이트에 로그인할 수 있는 관리자를 생성한다.
+
+관리 사이트에서 poll app 을 변경가능하도록 하려면 polls/admin.py 파일을 열어 다음과 같이 편집하면 된다..
+
+```
+from django.contrib import admin
+
+from .models import Question
+
+admin.site.register(Question)
+```
+
+## 03. PART 03
+
+### - 템플릿 만들기
+
+우선, polls 디렉토리에 templates라는 디렉토리를 만든다. 그 안에 polls라는 디렉토리를 생성하고, index.html을 만든다.
+views.py에서 템플릿을 호출하여 사용한다.
+
+### - 404 에러 일으키기
+
+파이썬의 예외 처리 코드를 사용해서 일으킨다.
+get_object_or_404() 메소드를 import 해서 사용해도 된다.
+
